@@ -95,3 +95,169 @@
 5. **Path Traversal Attack**  
 6. **MITM – Man-in-the-Middle Attack**  
 7. **DOS – Denial of Service Attack**
+
+# Lesson 2
+## OSI Model:
+
+1. Application Layer  
+2. Presentation Layer  
+3. Session Layer  
+4. Transport Layer  
+5. Network Layer  
+6. Data Link Layer  
+7. Physical Layer  
+
+---
+
+## TCP/IP Encapsulation – De-Encapsulation  
+### Headers Content
+
+---
+
+## OSI Model: Application Layer
+
+- Sits at Layer 7 (top) of the OSI model.  
+- Ensures applications can communicate across networks.  
+- It's *not* an application, but a part that controls communication.  
+- Defines protocols like: *HTTP, FTP, SMTP, Telnet, SSH*.  
+- Network applications *use* the Application Layer Protocols but do not reside in it.  
+- Also called the *Software Layer*.
+
+[Reference](https://www.techtarget.com/searchnetworking/definition/OSI)
+
+---
+
+## OSI Model: Presentation Layer
+
+- Handles *data formatting, **conversion, **encryption/decryption, and **compression*.  
+- Converts characters/numbers into binary – *Translation*.  
+- Reduces data size – *Compression*.  
+- Encrypts/Decrypts data (e.g., using *SSL*).
+
+---
+
+## OSI Model: Session Layer
+
+*1) Setting Up Sessions*  
+- Checks credentials  
+- Assigns session ID  
+- Negotiates services  
+
+*2) Maintaining Sessions*  
+- Transfers data  
+- Re-establishes sessions  
+
+*3) Tearing Down Sessions*  
+- By mutual agreement or intervention  
+
+*Examples:* NFS, PAP, RTP
+
+---
+
+## OSI Model: Transport Layer
+
+- Manages *Segmentation, **Flow Control, **Error Control*  
+- Protocols: *TCP* and *UDP*  
+- Data Unit: *Segments*
+
+### Segmentation  
+- Divides data into segments with sequence and port numbers.
+
+### Flow Control  
+- Controls data transmission rate (e.g., notebook 10Mb vs server 100Mb NIC).
+
+### Error Control  
+1. *Checksum* – Detects corrupted segments.  
+2. *Acknowledgement* – Confirms receipt of segments.  
+3. *Retransmission* – Sends missing or corrupted segments again.
+
+---
+
+## OSI Model: Network Layer
+
+- Data Unit: *Packets*  
+- Functions:  
+  - *Logical Addressing* (IP)  
+  - *Routing*  
+  - *Path Determination* (RIP, EIGRP, OSPF, ISIS, BGP)  
+
+*Protocols:* IPv4, IPv6, ICMP
+
+---
+
+## OSI Model: Data Link Layer
+
+- Two Sublayers:  
+  - *MAC (Media Access Control):* Physical addressing  
+  - *LLC (Logical Link Control):* Frame preparation  
+
+### Functions
+
+*Framing*  
+- Converts packets into frames for transmission.
+
+*Addressing*  
+- Adds source and destination MAC addresses to frames.
+
+[More Info](https://www.geeksforgeeks.org/network-layer-services-packetizing-routing-and-forwarding)  
+[More Info](https://www.geeksforgeeks.org/physical-layer-in-osi-model)  
+[More Info](https://www.geeksforgeeks.org/introduction-of-mac-address-in-computer-network)
+
+---
+
+### Additional DLL Functions
+
+*Error Control*  
+- Detects and corrects transmission errors using *error detection bits*.
+
+*Flow Control*  
+- Synchronizes sender and receiver speeds to avoid data loss.
+
+[More Info](https://www.geeksforgeeks.org/error-detection-in-computer-networks)  
+[More Info](https://www.geeksforgeeks.org/hamming-code-in-computer-network)
+
+---
+
+## OSI Model: Physical Layer
+
+- Handles *physical representation* of data.  
+- Converts data to binary (e.g., 0101011101).  
+
+---
+
+## TCP/IP Model
+
+- Developed by U.S. DoD for a *vendor-neutral* networking model.  
+- *Application Layer* in TCP/IP = Application + Presentation + Session (OSI).  
+- Encapsulation = Data passes *top-down* (adds headers).  
+- De-encapsulation = Reverse.
+
+### Layers:
+
+1. Application Layer  
+2. Transport Layer  
+3. Internet Layer  
+4. Link Layer  
+
+*Updated Model* also maps to:  
+Application → Transport → Network → Data Link → Physical
+
+---
+
+## TCP/IP Encapsulation – De-Encapsulation
+
+- Each layer *adds/removes headers* during packet transmission.
+
+---
+
+## Headers Content
+
+- *Transport Layer: Source & destination **port numbers*  
+- *Network Layer: Source & destination **IP addresses*  
+- *Data Link Layer*:  
+  - *Header: Source & destination **MAC addresses*  
+  - *Trailer: **FCS (Frame Check Sequence)* for error detection using CRC
+
+---
+
+*That is all for Lesson 2.*
