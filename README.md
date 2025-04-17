@@ -1,5 +1,4 @@
 # Lesson 1
-
 # 🔐 Information Security Concepts
 
 - **Information Security** involves protecting all forms of sensitive data (print, electronic, etc.) from unauthorized access, misuse, or disruption.
