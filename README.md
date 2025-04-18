@@ -326,11 +326,7 @@ This lesson covers four common **Layer 2 (Data Link Layer)** attacks in the OSI 
       ```
 
 ---
-
-Here's **Lesson 4** summarized and formatted in Markdown:
-
-```md
-# ✅ Lesson 4: Spanning Tree Protocol (STP) Attacks & Mitigations
+Lesson 4: Spanning Tree Protocol (STP) Attacks & Mitigations
 
 This lesson focuses on **Layer 2 attacks** that exploit the **Spanning Tree Protocol (STP)** and how to secure against them—particularly the **Root Bridge Spoofing Attack**.
 
@@ -409,18 +405,10 @@ This lesson focuses on **Layer 2 attacks** that exploit the **Spanning Tree Prot
 - **Loop Guard** prevents this scenario.
 
 ---
-```
-
-Let me know if you'd like Lesson 5 next or want these bundled into downloadable `.md` files!
-
-Here’s the full **Lesson 5** summary formatted in Markdown:
-
-```md
 # ✅ Lesson 5: VLAN Hopping, Storm Control & Network Planes
 
 This lesson covers advanced Layer 2 security topics including **VLAN hopping attacks**, **storm control**, and the **network planes model** (management, control, data).
 
----
 
 ## 🔹 1. VLAN Hopping Attacks
 
