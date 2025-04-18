@@ -259,5 +259,261 @@ Application → Transport → Network → Data Link → Physical
   - *Trailer: **FCS (Frame Check Sequence)* for error detection using CRC
 
 ---
+# ✅ Lesson 3: OSI Layer 2 Attacks & Mitigations
 
-*That is all for Lesson 2.*
+This lesson covers four common **Layer 2 (Data Link Layer)** attacks in the OSI model and the methods to defend against them.
+
+---
+
+## 🔹 1. MAC Address Flooding Attack
+
+- **Description:** Attacker floods a switch with fake MAC addresses to overflow its MAC address table.
+- **Effect:** Switch starts broadcasting traffic to all ports like a hub, enabling data interception.
+- **Mitigation:**  
+  - **Port Security:**
+    - Limit the number of allowed MAC addresses per port.
+    - Violation actions: shutdown, restrict, or protect.
+    - Tracks and blocks unknown devices.
+
+---
+
+## 🔹 2. DHCP Starvation Attack
+
+- **Description:** Attacker sends fake DHCP requests to exhaust the IP pool.
+- **Effect:** Legitimate devices can’t obtain IP addresses (DoS).
+- **Mitigation:**
+  - **Port Security**
+  - **DHCP Snooping:**
+    - Classifies switch ports as trusted or untrusted.
+    - Allows DHCP offers only from trusted ports.
+    - Builds a **binding table** (MAC-to-IP mappings).
+    - 🔧 **Config Example:**
+      ```bash
+      Switch(config)# ip dhcp snooping
+      Switch(config)# ip dhcp snooping vlan 1
+      Switch(config-if)# ip dhcp snooping trust
+      ```
+
+---
+
+## 🔹 3. Rogue DHCP Server
+
+- **Description:** Unauthorized DHCP server assigns incorrect IP or gateway info.
+- **Effect:** Causes misconfiguration, traffic redirection, or MITM.
+- **Mitigation:**
+  - **Port Security**
+  - **DHCP Snooping**
+
+---
+
+## 🔹 4. ARP Spoofing / ARP Poisoning
+
+- **Description:** Attacker sends fake ARP replies linking their MAC to another device’s IP.
+- **Effects:**
+  - Man-in-the-Middle (MITM) attacks
+  - Denial of Service (DoS)
+  - Data interception or manipulation
+- **Mitigation:**
+  - Static ARP entries
+  - ARP monitoring tools (e.g., `arpwatch`, `XArp`)
+  - **Dynamic ARP Inspection (DAI):**
+    - Validates ARP packets using DHCP snooping binding table.
+    - Drops malicious ARP packets.
+    - 🔧 **Config Example:**
+      ```bash
+      Switch(config)# ip arp inspection vlan 1
+      Switch(config-if)# ip arp inspection trust
+      ```
+
+---
+
+Here's **Lesson 4** summarized and formatted in Markdown:
+
+```md
+# ✅ Lesson 4: Spanning Tree Protocol (STP) Attacks & Mitigations
+
+This lesson focuses on **Layer 2 attacks** that exploit the **Spanning Tree Protocol (STP)** and how to secure against them—particularly the **Root Bridge Spoofing Attack**.
+
+---
+
+## 🔹 Attack: Root Bridge Spoofing
+
+- **Description:** 
+  - Attacker sends BPDUs with lower bridge priority or fake MAC address.
+  - This tricks switches into electing the attacker's switch as the **Root Bridge**.
+- **Effect:**
+  - Attacker gains control of network topology.
+  - Enables **MITM attacks** or network disruption.
+
+---
+
+## 🔐 Mitigation Techniques
+
+### 1. **PortFast**
+- Skips STP listening and learning states on ports connected to end devices.
+- Useful for faster boot and preventing participation in STP.
+- ⚙️ **Config:**
+  ```bash
+  Sw1(config-if)# spanning-tree portfast
+  ```
+
+---
+
+### 2. **BPDU Guard**
+- Disables a port if it receives **any BPDU** (unexpected on access ports).
+- Prevents accidental loops and unauthorized switches.
+- ⚙️ **Config:**
+  ```bash
+  Sw1(config-if)# spanning-tree bpduguard enable
+  Sw1(config)# errdisable recovery cause bpduguard
+  ```
+
+---
+
+### 3. **Root Guard**
+- Protects the role of the current root bridge.
+- If a port receives a superior BPDU, it goes into **root-inconsistent (blocked)** state.
+- ⚙️ **Config:**
+  ```bash
+  Sw1(config-if)# spanning-tree guard root
+  ```
+
+---
+
+### 4. **BPDU Filter**
+- Filters (blocks) BPDUs **in and out** on selected ports.
+- Prevents the port from participating in STP.
+- ⚠️ Use with caution—can cause loops if topology changes.
+- ⚙️ **Config:**
+  ```bash
+  Sw(config-if)# spanning-tree bpdufilter enable
+  ```
+
+---
+
+### 5. **Loop Guard**
+- Detects unidirectional link failures where BPDUs are not received but still sent.
+- Prevents such ports from transitioning to forwarding state (places in loop-inconsistent state).
+- ⚙️ **Config:**
+  ```bash
+  Sw(config-if)# spanning-tree guard loop
+  ```
+
+---
+
+## 🧠 Real-World Example
+
+- A switch receives BPDUs from a neighbor and blocks its port.
+- If one direction of a fiber link fails (e.g., due to hardware damage), BPDUs stop being received.
+- The port mistakenly moves to **forwarding**, forming a **unidirectional loop**.
+- **Loop Guard** prevents this scenario.
+
+---
+```
+
+Let me know if you'd like Lesson 5 next or want these bundled into downloadable `.md` files!
+
+Here’s the full **Lesson 5** summary formatted in Markdown:
+
+```md
+# ✅ Lesson 5: VLAN Hopping, Storm Control & Network Planes
+
+This lesson covers advanced Layer 2 security topics including **VLAN hopping attacks**, **storm control**, and the **network planes model** (management, control, data).
+
+---
+
+## 🔹 1. VLAN Hopping Attacks
+
+VLAN hopping allows an attacker to gain access to traffic on VLANs they shouldn't have access to. Two types:
+
+### A. Switch Spoofing
+- **Description:** Attacker pretends to be a switch using DTP packets to form a trunk link.
+- **Effect:** Attacker can access multiple VLANs.
+- **Mitigation:**
+  ```bash
+  switchport mode access
+  switchport nonegotiate
+  switchport mode trunk
+  interface range Gi0/1 - 24
+  shutdown
+  ```
+
+### B. Double Tagging
+- **Description:** Attacker sends frames with two VLAN tags. Outer tag is stripped by first switch; inner tag forwards to another VLAN.
+- **Mitigation:**
+  ```bash
+  switchport trunk native vlan 999
+  switchport trunk allowed vlan remove 1
+  switchport trunk allowed vlan 10,20,30
+  ```
+
+- **Bonus:** Use **ACLs** to restrict inter-VLAN traffic (covered in future lessons).
+
+---
+
+## 🔹 2. Storm Control
+
+### 🚦 What It Does:
+Limits and prevents **broadcast, multicast, and unicast storms** that can flood a network.
+
+### 🛠 Configuration Example:
+```bash
+interface FastEthernet0/1
+storm-control broadcast level 50.00
+storm-control multicast level 30.00
+storm-control action shutdown
+```
+
+- Default: **Disabled**
+- Thresholds can be set by **percent**, **pps**, or **bps**
+
+---
+
+## 🔹 3. Network Planes: Management, Control, and Data
+
+Modern network devices have three logical layers ("planes") of operation:
+
+### 🧑‍💻 A. Management Plane
+- **Purpose:** Administrative access (SSH, Telnet, SNMP, GUI)
+- **Risks:** Unauthorized access, brute force, misconfigurations
+
+### 🧠 B. Control Plane
+- **Purpose:** Makes routing decisions (OSPF, BGP, EIGRP, etc.)
+- **Risks:** Route injection, protocol spoofing
+- **Mitigation:** 
+  - Control Plane Policing (CoPP)
+  - Route filtering
+  - Protocol authentication
+
+### 🚚 C. Data Plane
+- **Purpose:** Forwards user data (IP forwarding, NAT, QoS, MPLS)
+- **Security Measures:** NAT rules, ACLs, inspection
+
+---
+
+## 🧵 Additional Concepts
+
+### Console Port
+- Used for **Out-of-Band** access when the device has no network connection.
+- Secure and direct management.
+
+### In-Band vs Out-of-Band Management
+- **In-Band:** SSH, Telnet, HTTP over IP
+- **Out-of-Band:** Direct console cable (no network required)
+
+---
+
+## 🔐 Cisco Password Types
+
+| Type | Method          | Security Level | Notes                            |
+|------|------------------|----------------|----------------------------------|
+| 0    | Plain Text       | ❌ Very Weak    | Avoid completely                 |
+| 7    | XOR (Weak Hash)  | ❌ Very Weak    | Reversible                       |
+| 5    | MD5 Hash         | ✅ Moderate     | One-way hash, still common       |
+| 8    | SHA256 / PBKDF2  | ✅✅ Strong     | Newer and recommended            |
+| 9    | Scrypt           | ✅✅✅ Very Strong | Best option for secure storage   |
+
+---
+```
+
+Let me know if you want this bundled with the others into downloadable files or converted to PDF!
