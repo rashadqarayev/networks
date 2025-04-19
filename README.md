@@ -161,7 +161,7 @@
 - Data Unit: *Segments*
 
 ### Segmentation  
-- Divides data into segments with sequence and port numbers.
+- Divides data into segments with sequence and port numbers and data unit
 
 ### Flow Control  
 - Controls data transmission rate (e.g., notebook 10Mb vs server 100Mb NIC).
